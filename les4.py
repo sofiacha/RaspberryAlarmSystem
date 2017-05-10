@@ -32,6 +32,7 @@ GPIO.setwarnings(False)
 	
 GPIO.setup(17,GPIO.OUT)
 GPIO.setup(27,GPIO.OUT)
+GPIO.setup(22,GPIO.OUT)
 
 GPIO.setup(10,GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -50,6 +51,10 @@ while True:
 	
 	if (GPIO.input(10) == False):
 		times = times +1
+		GPIO.output(22,GPIO.HIGH)
+		time.sleep(.1)
+		GPIO.output(22,GPIO.LOW)
+		
 		if times==1:
 			print "Button pressed %s time" %(times) 
 		else:
@@ -64,7 +69,10 @@ while True:
 if (led.lower() == "red") :
 	print "Red started blinking"
 	for i in range(1,times+1):
+		GPIO.output(22,GPIO.HIGH)		
 		GPIO.output(17,GPIO.HIGH)
+		time.sleep(.1)
+		GPIO.output(22,GPIO.LOW)
 		GPIO.output(27,GPIO.LOW)
 		time.sleep(1)
 		GPIO.output(17,GPIO.LOW)
@@ -72,7 +80,10 @@ if (led.lower() == "red") :
 elif (led.lower() == "blue"):
 	print "Blue started blinking"
 	for i in range(1,times+1):
+		GPIO.output(22,GPIO.HIGH)		
 		GPIO.output(27,GPIO.HIGH)
+		time.sleep(.1)
+		GPIO.output(22,GPIO.LOW)
 		GPIO.output(17,GPIO.LOW)
 		time.sleep(1)
 		GPIO.output(27,GPIO.LOW)
