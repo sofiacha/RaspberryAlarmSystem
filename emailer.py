@@ -8,12 +8,12 @@ import RPi.GPIO as GPIO
 
 def emailer(ldr,therm):
 	
-	smtpUser = 'pi.joomla.solutions@gmail.com'
-	smtpPass= '10Oct1991'
+	smtpUser = 'YourMail@gmail.com'
+	smtpPass= 'YourPassword'
 
-	toAdd = "pi.joomla.solutions@gmail.com"
+	toAdd = "Receiver@gmail.com"
 	fromAdd = smtpUser
-
+	#sending mail with the light sensor value and the thermometer sensor value
 	subject = 'Information mail'
 	header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd +'\n' + 'Subject: ' + subject
 	body = 'Current light value is %d. \n Current temperature is %d' %(ldr,therm)
