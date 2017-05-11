@@ -4,7 +4,7 @@ import smtplib
 smtpUser = 'pi.joomla.solutions@gmail.com'
 smtpPass= '10Oct1991'
 
-toAdd = "sofaki.arms@gmail.com"
+toAdd = "pi.joomla.solutions@gmail.com"
 fromAdd = smtpUser
 
 subject = 'Python Test'

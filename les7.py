@@ -3,7 +3,7 @@
 
 import MySQLdb
 
-def insert(lght):
+def insertlght(lght):
 	# Open database connection
 	db = MySQLdb.connect("localhost","root","10101991","SensAlarm" )
 
@@ -47,7 +47,7 @@ while True:
     GetDateTime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     LDRReading = RCtime(3)
     print RCtime(3)
-    insert(LDRReading)
+    insertlght(LDRReading)
 
     # Open a file
     fo = open("/home/pi/Desktop/RaspbPI/foo.txt", "wb")
