@@ -4,7 +4,7 @@
 
 def insert(cals, farh):
 	# Open database connection
-	db = MySQLdb.connect("localhost","root","10101991","SensAlarm" )
+	db = MySQLdb.connect("localhost","root","password","SensAlarm" )
 
 	# prepare a cursor object using cursor() method
 	cursor = db.cursor()
