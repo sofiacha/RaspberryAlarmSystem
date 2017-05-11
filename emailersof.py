@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import smtplib 
-smtpUser = 'pi.joomla.solutions@gmail.com'
-smtpPass= '10Oct1991'
+smtpUser = 'YourMailHere@gmail.com'
+smtpPass= 'YourPassword'
 
-toAdd = "pi.joomla.solutions@gmail.com"
+toAdd = "EmailToSend@gmail.com"
 fromAdd = smtpUser
 
 subject = 'Python Test'
