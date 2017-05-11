@@ -4,16 +4,13 @@
 
 import os
 import MySQLdb
-
-
-
+#insert to database 2 values, temperature in celsius and in farheneit
+#sample code provided by tutorials point:  https://www.tutorialspoint.com/python/python_database_access.htm
 def insert(cals, farh):
 	# Open database connection
-	db = MySQLdb.connect("localhost","root","10101991","SensAlarm" )
-
+	db = MySQLdb.connect("localhost","root","password","database" )
 	# prepare a cursor object using cursor() method
 	cursor = db.cursor()
-
 	# Prepare SQL query to INSERT a record into the database.
 	sql = "INSERT INTO Thermometre(celsius,fahreneit) VALUES ('%d', '%d')"  %(cals, farh)
 	try:
@@ -24,7 +21,6 @@ def insert(cals, farh):
 	except:
 	   # Rollback in case there is any error
 	   db.rollback()
-
 	# disconnect from server
 	db.close()
 
