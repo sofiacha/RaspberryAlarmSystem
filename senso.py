@@ -9,12 +9,13 @@ import datetime
 from time import sleep
 import RPi.GPIO as GPIO
 
+#function to send emails informative and SOS ones
 def emailer(ldr,therm,subje,danger):
 	
-	smtpUser = 'pi.joomla.solutions@gmail.com'
-	smtpPass= '10Oct1991'
+	smtpUser = 'YourEmail@gmail.com'
+	smtpPass= 'YourPassword'
 
-	toAdd = "pi.joomla.solutions@gmail.com"
+	toAdd = "receiver@gmail.com"
 	fromAdd = smtpUser
 
 	subject = subje
@@ -38,10 +39,10 @@ def emailer(ldr,therm,subje,danger):
 	s.quit
 
 
-
+#insert to database both celsius and farheneit temperature values 
 def insertherm(cals, farh):
 	# Open database connection
-	db = MySQLdb.connect("localhost","root","10101991","SensAlarm" )
+	db = MySQLdb.connect("localhost","root","password","SensAlarm" )
 
 	# prepare a cursor object using cursor() method
 	cursor = db.cursor()
@@ -64,7 +65,7 @@ def insertherm(cals, farh):
 	sleep(1)
 	GPIO.output(17,GPIO.LOW)
 
-
+#insert to database light sensor value
 def insertlght(lght):
 	# Open database connection
 	db = MySQLdb.connect("localhost","root","10101991","SensAlarm" )
@@ -88,7 +89,7 @@ def insertlght(lght):
 	GPIO.output(27,GPIO.HIGH)
 	sleep(1)
 	GPIO.output(27,GPIO.LOW)
-	
+#insert to database PIR value	
 def insertpir(pir):
 	# Open database connection
 	db = MySQLdb.connect("localhost","root","10101991","SensAlarm" )
@@ -110,27 +111,31 @@ def insertpir(pir):
 	# disconnect from server
 	db.close()	
 
-
+#count variable will help as instert to dabase every 10 seconds and send informative emails every hour 
 count = 0
 GPIO.setmode(GPIO.BCM)
+#PIR in GPIO 7
 GPIO_PIR = 7
-#print "PIR Module Test (CTRL-C to exit)"
+
 GPIO.setwarnings(False)
 GPIO.cleanup()
 
 # Set pin as input
 GPIO.setup(GPIO_PIR,GPIO.IN)
+#red led
 GPIO.setup(17,GPIO.OUT)
+#blue led
 GPIO.setup(27,GPIO.OUT)
+#buzzer
 GPIO.setup(22,GPIO.OUT)
+#2nd red led
 GPIO.setup(23,GPIO.OUT)
-
+#button
 GPIO.setup(10,GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
+#the two variables are used t detect movent in comparison with before
 Current_State  = 0
 Previous_State = 0
-
-
+#function to read light value from sensor 
 def RCtime (RCpin):
     reading = 0
     GPIO.setup(RCpin, GPIO.OUT)
@@ -146,13 +151,13 @@ def RCtime (RCpin):
 base_dir = '/sys/bus/w1/devices/'
 device_folder = glob.glob(base_dir + '28*')[0]
 device_file = device_folder + '/w1_slave'
-
+#function read temperature from file
 def read_temp_raw():
     f = open(device_file, 'r')
     lines = f.readlines()
     f.close()
     return lines
-
+#using function read_temp_raw we are reading temperature and insert it in database
 def read_temp():
     lines = read_temp_raw()
     while lines[0].strip()[-3:] != 'YES':
@@ -164,7 +169,7 @@ def read_temp():
         temp_c = float(temp_string) / 1000.0
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         insertherm(temp_c, temp_f)
-        return temp_c, temp_f
+        return temp_c
 
 """
 try:
@@ -186,11 +191,13 @@ except KeyboardInterrupt:
 
 
 while True: 
+	#reads from GPIO 
 	Current_State = GPIO.input(GPIO_PIR)
-	
+	#every ten seconds reads and insert to dabase LDR, PIR and temperature values
 	if count%10 ==0:
 		TermReading = read_temp()
-		print TermReading 
+		print TermReading
+		#for every reading a different led blinks
 		GPIO.output(17,GPIO.HIGH)
 		LDRReading = RCtime(3)
 		print LDRReading
@@ -204,12 +211,12 @@ while True:
 		GPIO.output(27,GPIO.LOW)
 		GPIO.output(23,GPIO.LOW)
 		GPIO.output(22,GPIO.LOW)
-    
+    	#detects if an intruder is in the house and turns on all the leds and the buzzer and sends a SOS email
 	if Current_State==1 and Previous_State==0:
 		# PIR is triggered
 		print "  Motion detected!"
 		emailer(LDRReading,TermReading,"SOS DANGER",1)
-        # Record previous state
+     		# Record previous state
 		GPIO.output(22,GPIO.HIGH)
 		GPIO.output(23,GPIO.HIGH)
 		GPIO.output(27,GPIO.HIGH)
@@ -221,10 +228,11 @@ while True:
         # PIR has returned to ready state
 		print "  Ready"
 		Previous_State=0
-    # Record previous state  
+    	# Record previous state  
 	sleep(1)
 	count = count + 1
 	subj = "Information mail"
+	#every one hour an informative mail is sent to user
 	if count%360 ==0:
 		d=0
 		emailer(LDRReading,TermReading,subj,d)
