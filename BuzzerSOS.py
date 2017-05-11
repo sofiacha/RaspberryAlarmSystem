@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  les5.py
+#  This is the exact copy of the code provided here:  https://www.modmypi.com/blog/youtube-workshop-kit/gpio-and-python-69-buzzer
 #    
 
 import os
